@@ -431,15 +431,34 @@
       });
       // city nodes
       const fs = Math.max(10, Math.min(13, W / 42));
+      // place labels so they never overlap each other or another city's dot
+      ctx.font = `400 ${fs}px "IBM Plex Mono", monospace`;
+      const placed = cities.map((ci) => { const [x, y] = proj(ci.p); return [x - 5, y - 5, x + 5, y + 5]; });
+      const spots = [];
+      cities.forEach((ci) => {
+        const [x, y] = proj(ci.p), w = ctx.measureText(ci.n.toUpperCase()).width;
+        const prefLeft = ['Karachi', 'Nooriabad', 'Faisalabad', 'Multan'].includes(ci.n);
+        const cands = [];
+        for (const dy of [4, -8, 16, -20, 28, -32, 40]) for (const side of (prefLeft ? [1, 0] : [0, 1])) cands.push([side, dy]);
+        let best = null;
+        for (const [left, dy] of cands) {
+          const bx0 = left ? x - 10 - w : x + 10, by0 = y + dy - fs, box = [bx0, by0, bx0 + w, by0 + fs + 3];
+          if (box[0] < 2 || box[2] > W - 2 || box[1] < 2 || box[3] > H - 2) continue;
+          if (placed.some((b) => !(box[2] < b[0] || box[0] > b[2] || box[3] < b[1] || box[1] > b[3]))) continue;
+          best = { left, dy, box }; break;
+        }
+        if (!best) best = { left: prefLeft, dy: 4, box: [0, 0, 0, 0] };
+        placed.push(best.box); spots.push(best);
+      });
       cities.forEach((ci, i) => {
         const k = i === 0 ? smooth(0, .1, p) : smooth(.25 + i * .06, .32 + i * .06, p); if (k <= 0) return;
         const [x, y] = proj(ci.p), pulse = (Math.sin(t * 2 + i) + 1) / 2;
         ctx.fillStyle = `rgba(224,112,47,${.18 * k * (1 - pulse)})`; ctx.beginPath(); ctx.arc(x, y, 6 + pulse * 10, 0, 6.283); ctx.fill();
         ctx.fillStyle = ci.hq ? '#E0702F' : '#EEE6D3'; ctx.globalAlpha = k; ctx.beginPath(); ctx.arc(x, y, ci.hq ? 4 : 3, 0, 6.283); ctx.fill();
         ctx.font = `400 ${fs}px "IBM Plex Mono", monospace`; ctx.fillStyle = 'rgba(238,230,211,.85)';
-        const left = ['Karachi', 'Nooriabad', 'Faisalabad', 'Multan'].includes(ci.n);
+        const { left, dy } = spots[i];
         ctx.textAlign = left ? 'right' : 'left';
-        const dy = ci.n === 'Nooriabad' ? 12 : ci.n === 'Hyderabad' ? -8 : ci.n === 'Sheikhupura' ? -8 : ci.n === 'Faisalabad' ? 4 : 4;
+        if (dy !== 4 && dy !== -8) { ctx.strokeStyle = 'rgba(238,230,211,.35)'; ctx.lineWidth = .8; ctx.beginPath(); ctx.moveTo(x + (left ? -4 : 4), y); ctx.lineTo(x + (left ? -9 : 9), y + dy - fs * .35); ctx.stroke(); }
         ctx.fillText(ci.n.toUpperCase(), x + (left ? -10 : 10), y + dy); ctx.globalAlpha = 1;
       });
       ctx.textAlign = 'left';

@@ -59,6 +59,7 @@
 
   /* ---------- no-GSAP / reduced-motion fallback ---------- */
   if (!hasGSAP || reduce) {
+    html.classList.remove('motion');
     html.classList.add('loaded');
     document.getElementById('loader')?.remove();
     initFibres(); initMap(true); initYarnStatic();
@@ -134,6 +135,66 @@
   gsap.to(heroImg, { yPercent: 12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
   gsap.to('.hero .year', { yPercent: -40, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
+
+  /* ---------- THE THREAD: pinned 6-chapter story, scrubbed 1:1 ---------- */
+  const tsState = window.__ts = { p: 0 };
+  (() => {
+    const stageEl = document.querySelector('.ts-stage'); if (!stageEl) return;
+    const cards = [...stageEl.querySelectorAll('.tc')];
+    const rail = [...stageEl.querySelectorAll('.ts-rail li')];
+    const yearEl = document.getElementById('tsYear'), yearBox = stageEl.querySelector('.ts-year');
+    const lights = stageEl.querySelector('.ts-lights'), fb = stageEl.querySelector('.ts-fallback');
+    const N = cards.length, mob = innerWidth < 760;
+    const blurIn = mob ? 'blur(0px)' : 'blur(10px)';
+    let active = -1;
+    const tl = gsap.timeline({ defaults: { ease: 'none' } });
+    // each chapter owns 1 unit; copy arrives early in its unit and leaves near the end
+    cards.forEach((c, i) => {
+      const parts = c.querySelectorAll('.tc-k, h3, p, .tc-cta');
+      if (i > 0) {
+        tl.fromTo(c, { autoAlpha: 0 }, { autoAlpha: 1, duration: .12, immediateRender: false }, i + .02)
+          .fromTo(parts, { y: 46, opacity: 0, filter: blurIn }, { y: 0, opacity: 1, filter: 'blur(0px)', stagger: .04, duration: .24, ease: 'power2.out', immediateRender: false }, i + .02);
+      }
+      if (i < N - 1) {
+        tl.to(parts, { y: -50, opacity: 0, filter: blurIn, stagger: .03, duration: .2, ease: 'power1.in' }, i + .76)
+          .to(c, { autoAlpha: 0, duration: .06 }, i + .92);
+      }
+    });
+    tl.set({}, {}, N); // total length = N units
+    // year counter 1988 -> 2026 while the thread lays down the timeline (ch 05)
+    const yr = { v: 1988 };
+    tl.fromTo(yearBox, { autoAlpha: 0, x: 40 }, { autoAlpha: 1, x: 0, duration: .25, immediateRender: false }, 4.15)
+      .fromTo(yr, { v: 1988 }, { v: 2026, duration: .65, immediateRender: false, onUpdate: () => { yearEl.textContent = Math.min(2026, Math.round(yr.v)); } }, 4.3)
+      .to(yearBox, { autoAlpha: 0, y: -30, duration: .2 }, 5.02);
+    if (fb) tl.fromTo(fb, { opacity: .35, scale: .9 }, { opacity: 1, scale: 1, duration: 1.2, immediateRender: false }, 0);
+    const scramble = (el) => {
+      const final = el.dataset.f || (el.dataset.f = el.textContent); let n = 0;
+      clearInterval(el._t);
+      el._t = setInterval(() => {
+        n++; el.textContent = n > 6 ? final : final.replace(/\d/g, () => Math.floor(Math.random() * 10));
+        if (n > 6) clearInterval(el._t);
+      }, 45);
+    };
+    const setActive = (i) => {
+      if (i === active) return; active = i;
+      rail.forEach((r, k) => r.classList.toggle('on', k === i));
+      const no = cards[i]?.querySelector('.tc-no'); if (no) scramble(no);
+      window.__chapter = ['Reveal', 'Spin', 'Strands', 'Up close', 'Timeline', 'Today'][i];
+    };
+    ScrollTrigger.create({
+      trigger: stageEl, start: 'top top', end: () => '+=' + innerHeight * (mob ? 5.6 : 7.2),
+      pin: true, scrub: true, anticipatePin: 1, animation: tl, invalidateOnRefresh: true,
+      onUpdate: (st) => {
+        tsState.p = st.progress;
+        stageEl.style.setProperty('--tsp', st.progress.toFixed(4));
+        if (lights) lights.style.setProperty('--spot', (.55 + .45 * Math.sin(st.progress * Math.PI * 3) ** 2).toFixed(3));
+        setActive(Math.min(N - 1, Math.floor(st.progress * N * .9999)));
+      },
+      onLeave: () => { window.__chapter = null; }, onLeaveBack: () => { window.__chapter = null; }
+    });
+    setActive(0);
+  })();
+
   /* ---------- section headings ---------- */
   document.querySelectorAll('.split').forEach((h) => {
     gsap.from(h.querySelectorAll('.w > span'), { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: .06, scrollTrigger: { trigger: h, start: 'top 85%' } });
@@ -185,6 +246,30 @@
     gsap.to(knot, { strokeDashoffset: 0, duration: 1.8, ease: 'power2.inOut', scrollTrigger: { trigger: '.knot', start: 'top 90%' } });
   }
 
+
+  /* ---------- cinematic extras ---------- */
+  initCursor();
+  initTilt();
+  initEdges();
+  initWordmark();
+  initProgress();
+  initMasks();
+  document.querySelectorAll('.sec-head .k, .craft-title > .mono, .contact > .mono').forEach((el) => {
+    const final = el.textContent; const chars = '0123456789·/—ABCDEFGHKMNRSTUVXZ';
+    ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: () => {
+      let f = 0; const L = final.length;
+      const run = () => { f++; el.textContent = [...final].map((c, i) => (c === ' ' || i < f * L / 18) ? c : chars[Math.floor(Math.random() * chars.length)]).join(''); if (f < 18) requestAnimationFrame(run); else el.textContent = final; };
+      run();
+    } });
+  });
+  // figures count up once
+  document.querySelectorAll('.figures b').forEach((b) => {
+    const node = b.firstChild; if (!node || node.nodeType !== 3) return;
+    const to = parseInt(node.textContent, 10); if (!to) return;
+    const from = to >= 1900 ? 1950 : 0, o = { v: from };
+    ScrollTrigger.create({ trigger: b, start: 'top 90%', once: true, onEnter: () => gsap.to(o, { v: to, duration: 1.6, ease: 'power3.out', onUpdate: () => { node.textContent = Math.round(o.v); } }) });
+  });
+
   /* ---------- canvases ---------- */
   initFibres();
   initYarn();
@@ -200,6 +285,118 @@
   });
 
   addEventListener('load', () => ScrollTrigger.refresh());
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
+  addEventListener('pageshow', (e) => { if (e.persisted) ScrollTrigger.refresh(); });
+
+
+  /* =============== cinematic implementations =============== */
+  function initCursor() {
+    if (!finePointer) return;
+    const cur = document.createElement('div'); cur.className = 'cursor off'; cur.setAttribute('aria-hidden', 'true');
+    cur.innerHTML = '<div class="ring"></div><div class="dot"></div><span class="lab"></span>';
+    document.body.appendChild(cur);
+    const lab = cur.querySelector('.lab');
+    const xTo = gsap.quickTo(cur, 'x', { duration: .35, ease: 'power3.out' }), yTo = gsap.quickTo(cur, 'y', { duration: .35, ease: 'power3.out' });
+    addEventListener('mousemove', (e) => { xTo(e.clientX); yTo(e.clientY); cur.classList.remove('off'); }, { passive: true });
+    document.addEventListener('mouseleave', () => cur.classList.add('off'));
+    const label = (el) => {
+      if (el.dataset.cursor) return el.dataset.cursor;
+      if (el.classList.contains('shot')) return 'View';
+      const h = el.getAttribute('href') || '';
+      if (h.includes('wa.me')) return 'Chat';
+      if (h.startsWith('tel:')) return 'Call';
+      if (h.startsWith('mailto:')) return 'Email';
+      if (h.startsWith('#')) return 'Go';
+      return 'Open';
+    };
+    document.querySelectorAll('a, button, .shot').forEach((el) => {
+      el.addEventListener('mouseenter', () => { lab.textContent = label(el); cur.classList.add('hover'); });
+      el.addEventListener('mouseleave', () => cur.classList.remove('hover'));
+    });
+  }
+
+  function initTilt() {
+    if (!finePointer) return;
+    document.querySelectorAll('.c-card, .adv-item, .shot').forEach((el) => {
+      el.classList.add('tilt');
+      const rx = gsap.quickTo(el, 'rotationX', { duration: .5, ease: 'power3.out' }), ry = gsap.quickTo(el, 'rotationY', { duration: .5, ease: 'power3.out' });
+      gsap.set(el, { transformPerspective: 900 });
+      const amt = el.classList.contains('adv-item') ? 2.5 : 6;
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        ry((x - .5) * amt); rx(-(y - .5) * amt);
+        el.style.setProperty('--mx', (x * 100).toFixed(1) + '%'); el.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+      });
+      el.addEventListener('mouseleave', () => { rx(0); ry(0); });
+    });
+  }
+
+  // shaped edges: the previous section's colour sits over the top of the next one as a curve/wave and recedes with scroll
+  function initEdges() {
+    const defs = [
+      ['#presence', '#06080F', 'M0 0 H1440 V120 C 1180 300, 260 300, 0 120 Z'],
+      ['#field', '#0B1226', 'M0 0 H1440 V150 C 1260 60, 1080 240, 900 150 C 720 60, 540 240, 360 150 C 180 60, 90 200, 0 150 Z'],
+      ['#contact', '#06080F', 'M0 0 H1440 V40 L720 260 L0 40 Z']
+    ];
+    defs.forEach(([sel, col, d]) => {
+      const sec = document.querySelector(sel); if (!sec) return;
+      const e = document.createElement('div'); e.className = 'edge'; e.setAttribute('aria-hidden', 'true');
+      e.innerHTML = `<svg viewBox="0 0 1440 300" preserveAspectRatio="none"><path d="${d}" fill="${col}"/></svg>`;
+      sec.prepend(e);
+      gsap.fromTo(e, { scaleY: 1 }, { scaleY: 0, ease: 'none', scrollTrigger: { trigger: sec, start: 'top 95%', end: 'top 25%', scrub: true } });
+    });
+  }
+
+  function initWordmark() {
+    const wm = document.querySelector('.wordmark'); if (!wm) return;
+    const t = wm.querySelector('.wm-t'); const txt = t.textContent;
+    t.innerHTML = [...txt].map((c) => `<span class="wl"><span>${c === ' ' || c === ' ' ? '&nbsp;' : c}</span></span>`).join('');
+    const sweep = document.createElement('span'); sweep.className = 'wm-s'; sweep.textContent = txt; wm.appendChild(sweep);
+    // fit to width
+    const fit = () => { wm.style.fontSize = '13vw'; const avail = wm.clientWidth, w = t.scrollWidth; if (w > avail) wm.style.fontSize = (13 * avail / w * .98).toFixed(2) + 'vw'; };
+    fit(); addEventListener('resize', fit); document.fonts && document.fonts.ready.then(fit);
+    const o = { x: -40 };
+    const paint = () => { sweep.style.clipPath = `polygon(${o.x}% 0,${o.x + 12}% 0,${o.x - 8}% 100%,${o.x - 20}% 100%)`; };
+    gsap.timeline({ scrollTrigger: { trigger: wm, start: 'top 92%' } })
+      .from(t.querySelectorAll('.wl > span'), { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: .05 })
+      .to(o, { x: 130, duration: 1.6, ease: 'power2.inOut', onUpdate: paint }, .6);
+    paint();
+  }
+
+  function initProgress() {
+    const box = document.getElementById('progress'), bar = document.getElementById('progBar'), name = document.getElementById('progName');
+    if (!box) return;
+    const secs = [['.hero', 'Abdul Rasheed Gill'], ['#thread-story', 'The thread'], ['#story', '01 · The story'], ['#craft', '02 · Expertise'], ['.quote', 'In his words'], ['#advisory', '03 · Advisory'], ['#presence', '04 · Presence'], ['#field', '05 · On the floor'], ['#contact', '06 · Contact']];
+    let cur = '';
+    secs.forEach(([sel, label]) => {
+      const el = document.querySelector(sel); if (!el) return;
+      ScrollTrigger.create({ trigger: el, start: 'top 55%', end: 'bottom 55%', onToggle: (s) => { if (s.isActive) cur = label; } });
+    });
+    ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (s) => {
+      bar.style.transform = `scaleX(${s.progress.toFixed(4)})`;
+      const l = window.__chapter ? 'The thread · ' + window.__chapter : cur;
+      if (name.textContent !== l) name.textContent = l;
+      box.classList.toggle('show', s.scroll() > innerHeight * .6);
+    } });
+  }
+
+  // image mask reveals (photos untouched: only clip-path on the frame + gentle parallax)
+  function initMasks() {
+    gsap.utils.toArray('.chap figure').forEach((f) => {
+      const tw = { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'power3.inOut' };
+      gsap.set(f, { clipPath: 'inset(0% 0% 100% 0%)' });
+      if (desktop()) {
+        // story track is horizontal on desktop: reveal when the chapter enters the viewport
+        const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { gsap.to(f, tw); io.disconnect(); } }, { rootMargin: '0px -10% 0px 0px' });
+        io.observe(f);
+      } else ScrollTrigger.create({ trigger: f, start: 'top 88%', once: true, onEnter: () => gsap.to(f, tw) });
+    });
+    gsap.utils.toArray('.shot .ph').forEach((ph, i) => {
+      gsap.set(ph, { clipPath: 'inset(100% 0% 0% 0%)' });
+      const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { gsap.to(ph, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'power3.inOut', delay: (i % 3) * .08 }); io.disconnect(); } });
+      io.observe(ph);
+    });
+  }
 
   /* =============== implementations =============== */
   function fitCanvas(c, ctx) {

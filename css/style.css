@@ -294,3 +294,144 @@ footer{border-top:1px solid var(--line);padding-block:34px 40px}
 .nf{min-height:100svh;display:grid;place-items:center;text-align:center;padding:40px var(--gut)}
 .nf h1{font-size:clamp(90px,20vw,240px);color:transparent;-webkit-text-stroke:1px rgba(238,230,211,.4)}
 .nf p{color:var(--mute);margin:10px 0 28px}
+
+/* =====================================================================
+   Cinematic layer: the luminous thread (WebGL), progress, cursor label,
+   shaped section edges, giant wordmark. Static/fallback first; .motion
+   (set in <head> when motion is allowed) switches on the pinned stage.
+   ===================================================================== */
+.skip{position:fixed;left:12px;top:-60px;z-index:300;background:var(--copper);color:var(--ink);padding:10px 16px;border-radius:999px;font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;transition:top .2s}
+.skip:focus{top:12px}
+
+/* ---- thread story: static layout (no JS / reduced motion) ---- */
+.ts{position:relative;z-index:5;background:var(--ink);padding:clamp(90px,12vw,160px) var(--gut) clamp(60px,8vw,120px)}
+.ts-stage{position:relative;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);grid-template-rows:auto 1fr;gap:28px clamp(30px,5vw,80px);max-width:1440px;margin-inline:auto}
+#loom,.ts-fallback{grid-column:1;grid-row:1/span 2;width:100%;height:min(78vh,720px);position:sticky;top:90px;display:block}
+#loom{display:none}
+html.gl-ready #loom{display:block}
+html.gl-ready .ts-fallback{display:none}
+.ts-title{grid-column:2;color:var(--copper);display:flex;gap:14px;align-items:center;font-weight:400}
+.ts-title::before{content:"";width:34px;height:1px;background:var(--copper)}
+.ts-copy{grid-column:2;display:grid;grid-template-columns:minmax(0,1fr);gap:0;min-width:0}
+.tc{padding:30px 0 34px;border-top:1px solid var(--line)}
+.tc-k{display:flex;gap:14px;color:var(--mute);margin-bottom:16px}
+.tc-k b{color:var(--copper);font-weight:500;font-variant-numeric:tabular-nums}
+.tc h3{font-size:clamp(32px,3.4vw,56px);margin-bottom:16px}
+.tc p{color:#cfc8b8;font-weight:300;max-width:44ch}
+.tc-name{font:400 clamp(46px,5vw,84px)/.95 var(--display)!important;color:var(--ivory)!important;max-width:none!important;letter-spacing:-.015em}
+html.motion .tc-name{white-space:nowrap}
+.tc-name em{font-style:italic;color:var(--copper)}
+.tc-line{display:block;height:1px;width:min(100%,560px);margin:22px 0 4px;background:var(--copper);box-shadow:0 0 12px rgba(224,112,47,.6)}
+html.gl-ready.motion .tc-line{visibility:hidden}
+.tc-role{color:var(--mute)!important;margin-top:18px}
+.tc-cta{margin-top:28px}
+.ts-rail,.ts-year,.ts-labels,.ts-lights{display:none}
+@media (max-width:860px){
+  .ts-stage{grid-template-columns:1fr}
+  #loom,.ts-fallback{grid-column:1;grid-row:auto;height:52vh;position:relative;top:0}
+  .ts-title,.ts-copy{grid-column:1}
+  .tc-name{white-space:normal}
+}
+
+/* ---- thread story: pinned cinematic stage ---- */
+html.motion .ts{padding:0}
+html.motion .ts-stage{display:block;height:100vh;height:100svh;min-height:560px;max-width:none;overflow:hidden;background:var(--ink)}
+html.motion #loom{position:absolute;inset:0;width:100%;height:100%}
+html.motion .ts-fallback{position:absolute;top:12%;height:76%;width:auto;left:58%;grid-row:auto}
+html.motion .ts-lights{display:block;position:absolute;inset:0;pointer-events:none;opacity:var(--spot,.8);
+  background:
+   radial-gradient(38% 62% at 67% -6%,rgba(238,230,211,.11),rgba(238,230,211,0) 70%),
+   linear-gradient(90deg,rgba(6,8,15,.7) 0%,rgba(6,8,15,0) 46%)}
+html.motion .ts-title{position:absolute;left:var(--gut);top:clamp(92px,13vh,130px);z-index:3;margin:0}
+html.motion .ts-copy{position:absolute;inset:0;z-index:3;pointer-events:none;display:block}
+html.motion .tc{position:absolute;top:0;bottom:0;left:var(--gut);width:min(440px,36vw);display:flex;flex-direction:column;justify-content:center;padding:0;border:0;will-change:transform,opacity}
+html.motion .tc>*{pointer-events:auto}
+html.motion .tc:not(:first-child){opacity:0;visibility:hidden}
+html.motion .tc-final{left:0;right:0;width:auto;align-items:center;text-align:center;padding-bottom:4vh}
+html.motion .tc-final .tc-k{justify-content:center}
+html.motion .tc-final .tc-line{margin:26px auto 6px}
+html.motion .tc-role{margin-top:34px}
+html.motion .ts-rail{display:flex;position:absolute;left:var(--gut);right:var(--gut);bottom:30px;z-index:3;list-style:none;margin:0;padding:16px 0 0;border-top:1px solid var(--line);justify-content:space-between;gap:10px;color:var(--mute)}
+html.motion .ts-rail li{display:flex;gap:10px;opacity:.4;transition:opacity .4s,color .4s}
+html.motion .ts-rail li i{font-style:normal;color:var(--copper)}
+html.motion .ts-rail li.on{opacity:1;color:var(--ivory)}
+html.motion .ts-rail::before{content:"";position:absolute;left:0;top:-1px;height:1px;width:100%;background:var(--copper);transform-origin:left;transform:scaleX(var(--tsp,0))}
+html.motion .ts-year{display:block;position:absolute;right:var(--gut);top:30%;z-index:2;font:400 clamp(110px,15vw,250px)/.8 var(--display);letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(238,230,211,.42);font-variant-numeric:tabular-nums;opacity:0;visibility:hidden;pointer-events:none}
+html.motion.gl-ready .ts-labels{display:block;position:absolute;inset:0;z-index:2;pointer-events:none}
+.tl{position:absolute;left:0;top:0;opacity:0;will-change:transform,opacity}
+.tl i{position:absolute;left:0;top:0;width:100px;height:1px;background:rgba(238,230,211,.55);transform-origin:0 0}
+.tl b{position:absolute;left:-3px;top:-3px;width:7px;height:7px;border-radius:50%;background:var(--copper);box-shadow:0 0 10px rgba(224,112,47,.8)}
+.tl span{position:absolute;top:-9px;white-space:nowrap;font:400 12px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ivory);background:rgba(6,8,15,.6);padding:1px 6px}
+.tl span em{font-style:normal;color:var(--copper)}
+.tk{position:absolute;left:0;top:0;opacity:0;will-change:transform,opacity}
+.tk b{position:absolute;left:-4px;top:-4px;width:9px;height:9px;border-radius:50%;border:1px solid var(--copper);background:var(--ink)}
+.tk span{position:absolute;top:18px;left:0;transform:translateX(-50%);white-space:nowrap;font:400 12px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.tk span em{display:block;font-style:normal;color:var(--ivory);font-family:var(--display);font-size:22px;letter-spacing:0;text-transform:none}
+.tk.first span{transform:none;left:-4px}.tk.last span{transform:translateX(-100%);left:4px;text-align:right}
+@media (max-width:980px){html.motion .ts-rail{display:none}}
+@media (max-width:760px){
+  html.motion .ts-stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:52%;z-index:2;pointer-events:none;background:linear-gradient(0deg,var(--ink) 30%,rgba(6,8,15,.85) 60%,rgba(6,8,15,0))}
+  html.motion .ts-lights{background:radial-gradient(70% 50% at 50% -6%,rgba(238,230,211,.10),rgba(238,230,211,0) 70%)}
+  html.motion .ts-title{top:86px}
+  html.motion .tc{left:var(--gut);right:var(--gut);width:auto;justify-content:flex-end;padding-bottom:8svh}
+  html.motion .tc h3{font-size:31px;margin-bottom:12px}
+  html.motion .tc p{font-size:15.5px}
+  html.motion .tc-final{left:var(--gut);right:var(--gut);justify-content:center;padding-bottom:0}
+  html.motion .tc-final .tc-line{width:72%}
+  html.motion .tc-name{white-space:normal;font-size:clamp(48px,14vw,72px)!important}
+  html.motion .ts-fallback{left:50%;transform:translateX(-50%);top:14%;height:46%}
+  html.motion .ts-year{right:auto;left:var(--gut);top:20%;font-size:clamp(96px,30vw,150px)}
+}
+
+/* ---- scroll progress with chapter name ---- */
+.progress{position:fixed;right:var(--gut);bottom:22px;z-index:70;display:flex;align-items:center;gap:12px;padding:8px 14px 8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(6,8,15,.72);color:var(--mute);pointer-events:none;opacity:0;transform:translateY(10px);transition:opacity .4s,transform .4s}
+.progress.show{opacity:1;transform:none}
+.progress i{position:relative;display:block;width:64px;height:1px;background:var(--line);overflow:hidden}
+.progress i b{position:absolute;inset:0;background:var(--copper);transform-origin:left;transform:scaleX(0)}
+.progress span{color:var(--ivory);white-space:nowrap}
+@media (max-width:760px){
+  .progress{left:0;right:0;top:0;bottom:auto;padding:0;border:0;border-radius:0;background:none;transform:none}
+  .progress i{width:100%;height:2px;background:transparent}
+  .progress span{display:none}
+}
+
+/* ---- cursor label ---- */
+.cursor{display:block}
+.cursor .lab{position:absolute;left:0;top:0;transform:translate(-50%,-50%);font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ivory);opacity:0;transition:opacity .25s;white-space:nowrap}
+.cursor.hover .ring{width:92px;height:92px;margin:-46px 0 0 -46px}
+.cursor.hover .lab{opacity:1}
+.cursor.hover .dot{opacity:0}
+.cursor.off{opacity:0}
+@media (hover:none),(pointer:coarse){.cursor{display:none!important}}
+
+/* ---- tilt + glow cards ---- */
+.tilt{transform-style:preserve-3d;will-change:transform}
+.tilt::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(224,112,47,.13),rgba(224,112,47,0) 65%)}
+.tilt:hover::after{opacity:1}
+.shot.tilt{position:relative}
+
+/* ---- shaped section edges (previous section's colour receding) ---- */
+.edge{position:absolute;left:0;right:0;top:-1px;height:24vh;z-index:2;pointer-events:none;transform-origin:50% 0}
+.edge svg{display:block;width:100%;height:100%}
+
+/* ---- giant wordmark ---- */
+.wordmark{position:relative;overflow:hidden;padding:clamp(30px,5vw,70px) 0 clamp(18px,3vw,40px);line-height:.82;font-family:var(--display);font-weight:400;letter-spacing:-.035em;white-space:nowrap;color:rgba(238,230,211,.92);user-select:none;font-size:13vw}
+.wordmark .wm-t,.wordmark .wm-s{display:inline-block}
+.wordmark .wm-s{position:absolute;left:0;top:0;padding:inherit;color:var(--copper);clip-path:polygon(-20% 0,-8% 0,-28% 100%,-40% 100%);pointer-events:none}
+.wordmark .wl{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em}
+.wordmark .wl>span{display:inline-block}
+
+/* ---- 404 ---- */
+.nf .nf-thread{display:block;width:min(420px,80vw);height:60px;margin:0 auto 26px;overflow:visible}
+.nf .nf-thread path{fill:none;stroke-linecap:round}
+.nf h1 span{display:inline-block}
+@media (prefers-reduced-motion:no-preference){
+  .nf .nf-thread .main{stroke-dasharray:520;stroke-dashoffset:520;animation:nfdraw 1.6s cubic-bezier(.2,.7,.1,1) .2s forwards}
+  .nf .nf-thread .fray{opacity:0;animation:nffade .8s ease 1.5s forwards}
+  .nf h1,.nf p,.nf .pill,.nf img{animation:nfrise 1s cubic-bezier(.2,.8,.2,1) both}
+  .nf h1{animation-delay:.1s}.nf p{animation-delay:.35s}.nf .pill{animation-delay:.5s}
+}
+@keyframes nfdraw{to{stroke-dashoffset:0}}
+@keyframes nffade{to{opacity:1}}
+@keyframes nfrise{from{opacity:0;transform:translateY(24px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+html.motion .tc-name{font-size:clamp(50px,7.4vw,124px)!important}

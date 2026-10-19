@@ -28,11 +28,13 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/bodoni-moda-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/img/hero.jpg" as="image">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=3">
+<script>(function(){var h=document.documentElement;try{var c=document.createElement("canvas"),g=c.getContext("webgl2")||c.getContext("webgl");var rm=matchMedia("(prefers-reduced-motion: reduce)").matches;if(!rm)h.classList.add("motion");if(g){h.classList.add("glok");if(!rm)h.classList.add("gl");var x=g.getExtension("WEBGL_lose_context");x&&x.loseContext();}}catch(e){}})();</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ProfilePage","@id":"https://ceo.mtechtextiletraders.com/#page","url":"https://ceo.mtechtextiletraders.com/","name":"Abdul Rasheed Gill | Spinning Machinery, M Tech Since 1988","description":"Abdul Rasheed Gill founded M Tech Textile Traders, Lahore, in 1988: textile and spinning machinery, complete mills and advisory for mills across Pakistan.","inLanguage":"en","dateModified":"2026-10-18","isPartOf":{"@id":"https://ceo.mtechtextiletraders.com/#website"},"mainEntity":{"@id":"https://ceo.mtechtextiletraders.com/#person"},"primaryImageOfPage":"https://ceo.mtechtextiletraders.com/assets/img/hero.jpg"},{"@type":"WebSite","@id":"https://ceo.mtechtextiletraders.com/#website","url":"https://ceo.mtechtextiletraders.com/","name":"Abdul Rasheed Gill","inLanguage":"en","publisher":{"@id":"https://ceo.mtechtextiletraders.com/#person"}},{"@type":"Person","@id":"https://ceo.mtechtextiletraders.com/#person","name":"Abdul Rasheed Gill","jobTitle":"Founder & Chief Executive, M Tech Textile Traders","description":"Founder and CEO of M Tech Textile Traders, Lahore, in Pakistan's spinning industry since 1988: textile and spinning machinery, complete spinning mills, imports and advisory.","image":"https://ceo.mtechtextiletraders.com/assets/img/hero.jpg","url":"https://ceo.mtechtextiletraders.com/","telephone":"+92-300-4681423","email":"chabdulrasheedgill@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Lahore","addressRegion":"Punjab","addressCountry":"PK"},"worksFor":{"@id":"https://mtechtextiletraders.com/#business"},"knowsAbout":["Textile machinery","Spinning machinery","Used spinning machinery","Spinning mill sale and purchase","Machinery valuation","New spinning mill setup","Spinning production improvement","Spinning spare parts","Blowroom","Carding","Draw frames","Combers","Simplex","Ring frames","Autoconers","Open-end spinning"],"alternateName":"Abdul Rasheed","workLocation":[{"@type":"Place","name":"M Tech head office, Manga Mandi, Lahore","address":{"@type":"PostalAddress","addressLocality":"Lahore","addressRegion":"Punjab","addressCountry":"PK"}},{"@type":"Place","name":"M Tech warehouse, Darul Ehsan Town, Faisalabad","address":{"@type":"PostalAddress","addressLocality":"Faisalabad","addressRegion":"Punjab","addressCountry":"PK"}}]},{"@type":"LocalBusiness","@id":"https://mtechtextiletraders.com/#business","name":"M Tech Textile Traders","url":"https://mtechtextiletraders.com/","logo":"https://mtechtextiletraders.com/assets/img/icon-512.png","foundingDate":"1988","founder":{"@id":"https://ceo.mtechtextiletraders.com/#person"},"telephone":"+92-332-4681423","address":{"@type":"PostalAddress","streetAddress":"Main Bazar Rasheed Town, Near Post Office, Manga Mandi","addressLocality":"Lahore","addressRegion":"Punjab","addressCountry":"PK"},"description":"Buying and selling new and pre-owned textile machinery, spinning spare parts and complete spinning mills in Pakistan since 1988.","areaServed":{"@type":"Country","name":"Pakistan"},"sameAs":["https://www.facebook.com/mtechtextile","https://www.instagram.com/mtechtextiletrader","https://www.linkedin.com/company/mtechtextiletraders"]}]}</script>
 <noscript><style>#loader{display:none!important}</style></noscript>
 </head>
 <body>
+<a class="skip" href="#story">Skip to content</a>
 <div id="loader" aria-hidden="true">
   <div class="half t"></div><div class="half b"></div>
   <div class="inner">
@@ -46,6 +48,7 @@
   </div>
 </div>
 <div class="grain" aria-hidden="true"></div>
+<div class="progress mono" id="progress" aria-hidden="true"><i><b id="progBar"></b></i><span id="progName">Abdul Rasheed Gill</span></div>
 
 <header class="nav" id="nav">
   <a class="brand" href="#top" aria-label="Abdul Rasheed Gill, home">
@@ -88,6 +91,61 @@
       <span>Blowroom</span><span>Carding</span><span>Draw frames</span><span>Combers</span><span>Simplex</span><span>Ring frames</span><span>Autoconers</span><span>Open-end</span><span>Rieter</span><span>Tr&uuml;tzschler</span><span>Toyota</span><span>Zinser</span><span>Marzoli</span><span>Murata</span><span>Schlafhorst</span><span>Savio</span>
       <span>Blowroom</span><span>Carding</span><span>Draw frames</span><span>Combers</span><span>Simplex</span><span>Ring frames</span><span>Autoconers</span><span>Open-end</span><span>Rieter</span><span>Tr&uuml;tzschler</span><span>Toyota</span><span>Zinser</span><span>Marzoli</span><span>Murata</span><span>Schlafhorst</span><span>Savio</span>
     </div></div>
+  </section>
+
+
+  <!-- THE THREAD: one cotton thread tells the career (WebGL) -->
+  <section class="ts" id="thread-story" aria-labelledby="tsTitle">
+    <div class="ts-stage">
+      <canvas id="loom" aria-hidden="true"></canvas>
+      <svg class="ts-fallback" viewBox="0 0 200 520" aria-hidden="true">
+        <defs><radialGradient id="tsGlow"><stop offset="0" stop-color="#E0702F" stop-opacity=".28"/><stop offset="1" stop-color="#E0702F" stop-opacity="0"/></radialGradient></defs>
+        <circle cx="100" cy="250" r="98" fill="url(#tsGlow)"/>
+        <path d="M100 0 C 80 40, 120 60, 100 100 S 80 160, 100 200 S 120 260, 100 300 S 80 360, 100 400 S 120 460, 100 520" fill="none" stroke="#EEE6D3" stroke-opacity=".75" stroke-width="1.4"/>
+        <path d="M100 0 C 120 40, 80 60, 100 100 S 120 160, 100 200 S 80 260, 100 300 S 120 360, 100 400 S 80 460, 100 520" fill="none" stroke="#E0702F" stroke-width="1.4"/>
+      </svg>
+      <div class="ts-lights" aria-hidden="true"></div>
+      <h2 class="ts-title mono" id="tsTitle">The thread &middot; 1988 to 2026</h2>
+      <ol class="ts-rail mono" aria-hidden="true">
+        <li class="on"><i>01</i>Reveal</li><li><i>02</i>Spin</li><li><i>03</i>Strands</li><li><i>04</i>Up close</li><li><i>05</i>Timeline</li><li><i>06</i>Today</li>
+      </ol>
+      <div class="ts-copy">
+        <article class="tc" data-i="0">
+          <div class="tc-k mono"><b class="tc-no">01</b><span>Reveal &middot; Raw cotton</span></div>
+          <h3>It starts with a single boll of cotton.</h3>
+          <p>Every mill he has worked with turns raw cotton into yarn. His own working life began on the open-end spinning floors of Karachi, learning that process machine by machine.</p>
+        </article>
+        <article class="tc" data-i="1">
+          <div class="tc-k mono"><b class="tc-no">02</b><span>Spin &middot; Fibre becomes yarn</span></div>
+          <h3>Drafted, twisted, wound.</h3>
+          <p>Blowroom, carding, drawing, combing, simplex, ring spinning, winding. He studied every machine in the spinning line: how it runs, how it fails, and how it is put right.</p>
+        </article>
+        <article class="tc" data-i="2">
+          <div class="tc-k mono"><b class="tc-no">03</b><span>Strands &middot; One career</span></div>
+          <h3>Pull the thread apart and every strand is a chapter.</h3>
+          <p>Spare parts first, then whole machines, then complete mills and imports from abroad. Twisted together, they make one trade.</p>
+        </article>
+        <article class="tc" data-i="3">
+          <div class="tc-k mono"><b class="tc-no">04</b><span>Up close &middot; True value</span></div>
+          <h3>The worth is in the detail.</h3>
+          <p>Make, model year, hours, condition. Anyone can tell you a machine&rsquo;s price. Only experience tells you its worth.</p>
+        </article>
+        <article class="tc" data-i="4">
+          <div class="tc-k mono"><b class="tc-no">05</b><span>Timeline &middot; Since 1988</span></div>
+          <h3>Nearly four decades on one thread.</h3>
+          <p>From a spare-parts business in Lahore to more than fifty mills bought and sold, a warehouse in Faisalabad and machinery sourced from abroad.</p>
+        </article>
+        <article class="tc tc-final" data-i="5">
+          <div class="tc-k mono"><b class="tc-no">06</b><span>Today &middot; Lahore &amp; Faisalabad</span></div>
+          <p class="tc-name">Abdul Rasheed <em>Gill</em></p>
+          <span class="tc-line" aria-hidden="true"></span>
+          <p class="tc-role mono">Founder &amp; Chief Executive &middot; M Tech Textile Traders</p>
+          <div class="tc-cta"><a class="pill solid magnetic" href="#contact" data-cursor="Contact">Get in touch</a></div>
+        </article>
+      </div>
+      <div class="ts-year" aria-hidden="true"><span id="tsYear">1988</span></div>
+      <div class="ts-labels" id="tsLabels" aria-hidden="true"></div>
+    </div>
   </section>
 
   <!-- STORY -->
@@ -297,6 +355,7 @@
       <nav class="foot-links mono" aria-label="M Tech Textile Traders">
         <a href="https://mtechtextiletraders.com/">M Tech home</a><a href="https://mtechtextiletraders.com/services">Services</a><a href="https://mtechtextiletraders.com/services/machinery">Textile machinery</a><a href="https://mtechtextiletraders.com/services/spare-parts">Spinning spare parts</a><a href="https://mtechtextiletraders.com/stock">Stock</a><a href="https://mtechtextiletraders.com/team">Team</a><a href="https://mtechtextiletraders.com/contact">Contact</a>
       </nav>
+      <div class="wordmark" aria-hidden="true"><span class="wm-t">Rasheed&nbsp;Gill</span></div>
       <div class="foot">
         <a class="brand" href="#top"><img src="assets/img/mtech-mark.png" alt="M Tech Textile Traders logo" width="40" height="21"><span><b>Abdul Rasheed Gill</b><small>Founder &amp; Chief Executive, M Tech</small></span></a>
         <span class="mono">&copy; 2026 &middot; Lahore, Pakistan</span>
@@ -310,6 +369,7 @@
 <script src="js/vendor/gsap.min.js"></script>
 <script src="js/vendor/ScrollTrigger.min.js"></script>
 <script src="js/vendor/lenis.min.js"></script>
-<script src="js/main.js"></script>
+<script src="js/main.js?v=3"></script>
+<script type="module" src="js/thread3d.js?v=3"></script>
 </body>
 </html>

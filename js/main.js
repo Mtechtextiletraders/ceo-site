@@ -143,7 +143,7 @@
     .fromTo('.h-beam', { opacity: 0, scaleX: .6 }, { opacity: 1, scaleX: 1, duration: 1.6, ease: 'power2.out' }, 0)
     .to('.h-beam', { opacity: .82, duration: .07, repeat: 3, yoyo: true, ease: 'none' }, .2)
     .fromTo(fig, { opacity: 0, scale: .94, filter: 'brightness(.25)' }, { opacity: 1, scale: 1, filter: 'brightness(1)', duration: 1.8, ease: 'power3.out', clearProps: 'filter' }, .15)
-    .fromTo(lines, { yPercent: 110, rotate: 3 }, { yPercent: 0, rotate: 0, duration: 1.2, stagger: .1 }, .35)
+    .fromTo(lines, { yPercent: 110, rotate: 3 }, { yPercent: 0, rotate: 0, duration: 1.2, stagger: .1, clearProps: 'transform' }, .35)
     .fromTo('.hero .rv', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1, stagger: .09, ease: 'power3.out' }, .55)
     .fromTo('.h-sig span', { clipPath: 'inset(-30% 100% -30% -10%)' }, { clipPath: 'inset(-30% -10% -30% -10%)', duration: 1.4, ease: 'power2.inOut' }, 1)
     .fromTo('.h-ghost', { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 1.8, ease: 'power3.out' }, .3)

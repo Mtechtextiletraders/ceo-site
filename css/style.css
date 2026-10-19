@@ -132,7 +132,7 @@ p{margin:0}
 .eyebrow b{color:var(--gold);font-weight:500}
 .h1{display:grid;gap:14px}
 .h1-name{font:500 13px var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--ivory)}
-.h1-big{display:block;font:400 clamp(52px,6.9vw,128px)/.9 var(--display);text-transform:uppercase;color:var(--gold);letter-spacing:.003em;text-shadow:0 0 40px rgba(217,181,101,.18)}
+.h1-big{display:block;font:400 clamp(52px,6.9vw,128px)/.9 var(--display);text-transform:uppercase;color:var(--gold);letter-spacing:.003em}
 .h1-big .ln{display:block;overflow:hidden;padding-bottom:.04em;margin-bottom:-.02em}
 .h1-big .ln>span{display:inline-block;transform-origin:0 100%}
 .h1-big em{font-style:normal;color:var(--gold-hi)}

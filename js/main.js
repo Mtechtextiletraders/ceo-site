@@ -63,6 +63,7 @@
     html.classList.add('loaded');
     document.getElementById('loader')?.remove();
     initFibres(); initMap(true); initYarnStatic();
+    document.querySelector('.wa-fab')?.classList.add('show');
     return;
   }
 
@@ -136,64 +137,53 @@
   gsap.to('.hero .year', { yPercent: -40, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
 
-  /* ---------- THE THREAD: pinned 6-chapter story, scrubbed 1:1 ---------- */
-  const tsState = window.__ts = { p: 0 };
-  (() => {
-    const stageEl = document.querySelector('.ts-stage'); if (!stageEl) return;
-    const cards = [...stageEl.querySelectorAll('.tc')];
-    const rail = [...stageEl.querySelectorAll('.ts-rail li')];
-    const yearEl = document.getElementById('tsYear'), yearBox = stageEl.querySelector('.ts-year');
-    const lights = stageEl.querySelector('.ts-lights'), fb = stageEl.querySelector('.ts-fallback');
-    const N = cards.length, mob = innerWidth < 760;
-    const blurIn = mob ? 'blur(0px)' : 'blur(10px)';
+  /* ---------- 3D chapters: pinned, copy crossfades, progress scrubbed 1:1 (js/cine reads el.__p) ---------- */
+  const scramble = (el) => {
+    const final = el.dataset.f || (el.dataset.f = el.textContent); let n = 0;
+    clearInterval(el._t);
+    el._t = setInterval(() => { n++; el.textContent = n > 6 ? final : final.replace(/\d/g, () => Math.floor(Math.random() * 10)); if (n > 6) clearInterval(el._t); }, 45);
+  };
+  document.querySelectorAll('.cine-stage').forEach((stageEl) => {
+    const cards = [...stageEl.querySelectorAll('.cc')], rail = [...stageEl.querySelectorAll('.cine-rail li')];
+    const names = (stageEl.dataset.names || '').split('|');
+    const title = stageEl.querySelector('.cine-head .k')?.textContent || '';
+    const N = cards.length, mob = innerWidth < 760, blurIn = mob ? 'blur(0px)' : 'blur(10px)';
     let active = -1;
     const tl = gsap.timeline({ defaults: { ease: 'none' } });
-    // each chapter owns 1 unit; copy arrives early in its unit and leaves near the end
     cards.forEach((c, i) => {
-      const parts = c.querySelectorAll('.tc-k, h3, p, .tc-cta');
+      const parts = c.querySelectorAll('.cc-k, h3, p, .cc-cta');
       if (i > 0) {
-        tl.fromTo(c, { autoAlpha: 0 }, { autoAlpha: 1, duration: .12, immediateRender: false }, i + .02)
-          .fromTo(parts, { y: 46, opacity: 0, filter: blurIn }, { y: 0, opacity: 1, filter: 'blur(0px)', stagger: .04, duration: .24, ease: 'power2.out', immediateRender: false }, i + .02);
+        tl.fromTo(c, { autoAlpha: 0 }, { autoAlpha: 1, duration: .1, immediateRender: false }, i + .04)
+          .fromTo(parts, { y: 46, opacity: 0, filter: blurIn }, { y: 0, opacity: 1, filter: 'blur(0px)', stagger: .04, duration: .24, ease: 'power2.out', immediateRender: false }, i + .04);
       }
       if (i < N - 1) {
-        tl.to(parts, { y: -50, opacity: 0, filter: blurIn, stagger: .03, duration: .2, ease: 'power1.in' }, i + .76)
-          .to(c, { autoAlpha: 0, duration: .06 }, i + .92);
+        tl.to(parts, { y: -50, opacity: 0, filter: blurIn, stagger: .03, duration: .2, ease: 'power1.in' }, i + .78)
+          .to(c, { autoAlpha: 0, duration: .06 }, i + .94);
       }
     });
-    tl.set({}, {}, N); // total length = N units
-    // year counter 1988 -> 2026 while the thread lays down the timeline (ch 05)
-    const yr = { v: 1988 };
-    tl.fromTo(yearBox, { autoAlpha: 0, x: 40 }, { autoAlpha: 1, x: 0, duration: .25, immediateRender: false }, 4.15)
-      .fromTo(yr, { v: 1988 }, { v: 2026, duration: .65, immediateRender: false, onUpdate: () => { yearEl.textContent = Math.min(2026, Math.round(yr.v)); } }, 4.3)
-      .to(yearBox, { autoAlpha: 0, y: -30, duration: .2 }, 5.02);
-    if (fb) tl.fromTo(fb, { opacity: .35, scale: .9 }, { opacity: 1, scale: 1, duration: 1.2, immediateRender: false }, 0);
-    const scramble = (el) => {
-      const final = el.dataset.f || (el.dataset.f = el.textContent); let n = 0;
-      clearInterval(el._t);
-      el._t = setInterval(() => {
-        n++; el.textContent = n > 6 ? final : final.replace(/\d/g, () => Math.floor(Math.random() * 10));
-        if (n > 6) clearInterval(el._t);
-      }, 45);
-    };
+    tl.set({}, {}, N);
     const setActive = (i) => {
       if (i === active) return; active = i;
       rail.forEach((r, k) => r.classList.toggle('on', k === i));
-      const no = cards[i]?.querySelector('.tc-no'); if (no) scramble(no);
-      window.__chapter = ['Reveal', 'Spin', 'Strands', 'Up close', 'Timeline', 'Today'][i];
+      const no = cards[i]?.querySelector('.cc-no'); if (no) scramble(no);
+      window.__chapter = title + ' · ' + (names[i] || '');
     };
     ScrollTrigger.create({
-      trigger: stageEl, start: 'top top', end: () => '+=' + innerHeight * (mob ? 5.6 : 7.2),
+      trigger: stageEl, start: 'top top', end: () => '+=' + innerHeight * N * (mob ? 1.05 : 1.3),
       pin: true, scrub: true, anticipatePin: 1, animation: tl, invalidateOnRefresh: true,
       onUpdate: (st) => {
-        tsState.p = st.progress;
-        stageEl.style.setProperty('--tsp', st.progress.toFixed(4));
-        if (lights) lights.style.setProperty('--spot', (.55 + .45 * Math.sin(st.progress * Math.PI * 3) ** 2).toFixed(3));
+        stageEl.__p = st.progress;
+        stageEl.style.setProperty('--cp', st.progress.toFixed(4));
         setActive(Math.min(N - 1, Math.floor(st.progress * N * .9999)));
       },
-      onLeave: () => { window.__chapter = null; }, onLeaveBack: () => { window.__chapter = null; }
+      onToggle: (st) => { if (!st.isActive) window.__chapter = null; else setActive(Math.min(N - 1, Math.floor(st.progress * N * .9999))); }
     });
-    setActive(0);
-  })();
+    setActive(0); window.__chapter = null;
+  });
+
+  /* sticky WhatsApp (phones): appears after the hero */
+  const fab = document.querySelector('.wa-fab');
+  if (fab) ScrollTrigger.create({ start: () => innerHeight * .8, end: 'max', onToggle: (s) => fab.classList.toggle('show', s.isActive) });
 
   /* ---------- section headings ---------- */
   document.querySelectorAll('.split').forEach((h) => {
@@ -284,6 +274,7 @@
     if (sec) ScrollTrigger.create({ trigger: sec, start: 'top 50%', end: 'bottom 50%', onToggle: (s) => a.classList.toggle('on', s.isActive) });
   });
 
+  ScrollTrigger.sort(); ScrollTrigger.refresh();
   addEventListener('load', () => ScrollTrigger.refresh());
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
   addEventListener('pageshow', (e) => { if (e.persisted) ScrollTrigger.refresh(); });
@@ -366,7 +357,7 @@
   function initProgress() {
     const box = document.getElementById('progress'), bar = document.getElementById('progBar'), name = document.getElementById('progName');
     if (!box) return;
-    const secs = [['.hero', 'Abdul Rasheed Gill'], ['#thread-story', 'The thread'], ['#story', '01 · The story'], ['#craft', '02 · Expertise'], ['.quote', 'In his words'], ['#advisory', '03 · Advisory'], ['#presence', '04 · Presence'], ['#field', '05 · On the floor'], ['#contact', '06 · Contact']];
+    const secs = [['.hero', 'Abdul Rasheed Gill'], ['#story', '01 · The story'], ['#craft', '02 · Expertise'], ['.quote', 'In his words'], ['#advisory', '03 · Advisory'], ['#presence', '04 · Presence'], ['#field', '05 · On the floor'], ['#contact', '06 · Contact']];
     let cur = '';
     secs.forEach(([sel, label]) => {
       const el = document.querySelector(sel); if (!el) return;
@@ -374,7 +365,7 @@
     });
     ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (s) => {
       bar.style.transform = `scaleX(${s.progress.toFixed(4)})`;
-      const l = window.__chapter ? 'The thread · ' + window.__chapter : cur;
+      const l = window.__chapter || cur;
       if (name.textContent !== l) name.textContent = l;
       box.classList.toggle('show', s.scroll() > innerHeight * .6);
     } });
@@ -566,7 +557,7 @@
     let p = 0, target = 0, t = 0, active = 0, visible = false;
     ScrollTrigger.create({
       trigger: '#craftPin', start: 'top top', end: () => '+=' + innerHeight * (desktop() ? 4 : 3.2), pin: true, scrub: true, anticipatePin: 1,
-      onUpdate: (s) => { target = s.progress; },
+      onUpdate: (s) => { target = s.progress; c.parentElement.__p = s.progress; },
       onToggle: (s) => { visible = s.isActive || visible; }
     });
     new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(c);

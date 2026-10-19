@@ -183,7 +183,7 @@
 
   /* sticky WhatsApp (phones): appears after the hero */
   const fab = document.querySelector('.wa-fab');
-  if (fab) ScrollTrigger.create({ start: () => innerHeight * .8, end: 'max', onToggle: (s) => fab.classList.toggle('show', s.isActive) });
+  if (fab) { gsap.delayedCall(2.2, () => fab.classList.add('show')); }
 
   /* ---------- section headings ---------- */
   document.querySelectorAll('.split').forEach((h) => {
@@ -412,7 +412,7 @@
         const xr = parseFloat(s.dataset.thread);
         const edge = W < 760 ? 5 : 14;
         const x = xr <= .5 ? Math.max(edge, W * Math.min(xr, .04)) : Math.min(W - edge, W * Math.max(xr, .96));
-        pts.push([i === 0 ? W * .62 : x, i === 0 ? r.height * .92 : top + 40]);
+        pts.push([i === 0 ? (W < 760 ? W - 5 : W * .5) : x, i === 0 ? r.height + 10 : top + 40]);
         pts.push([x, top + r.height * .55]);
       });
       const k = document.querySelector('.knot svg');

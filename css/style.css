@@ -104,6 +104,7 @@ html.loaded #loader{display:none}
 .hero .year{position:absolute;right:-1vw;top:12vh;z-index:-4;font:400 clamp(160px,30vw,460px)/.8 var(--display);color:transparent;-webkit-text-stroke:1px rgba(238,230,211,.12);letter-spacing:-.04em;pointer-events:none;user-select:none}
 .hero .content{width:100%;padding:120px var(--gut) calc(var(--mq) + 64px);display:grid;gap:26px;max-width:1440px;margin-inline:auto}
 .hero .content>*{max-width:calc(50vw - var(--gut) - 32px)}
+@media (min-width:1441px){.hero .content>*{max-width:calc(50vw - (100vw - 1440px)/2 - var(--gut) - 32px)}}
 .hero .eyebrow{display:flex;flex-wrap:wrap;gap:10px 18px;color:var(--mute)}
 .hero .eyebrow b{color:var(--copper);font-weight:500}
 .hero h1{font-size:clamp(56px,7.6vw,138px);line-height:.92}
@@ -392,7 +393,9 @@ footer{border-top:1px solid var(--line);padding-block:34px 40px}
 /* pinned cinematic stage */
 html.motion .cine-stage{display:block;max-width:none;height:100vh;height:100svh;min-height:560px;padding:0;overflow:hidden}
 html.motion .cine-media{position:absolute;inset:0;aspect-ratio:auto;top:0}
-html.motion .cine-media::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(90deg,rgba(6,8,15,.72) 0%,rgba(6,8,15,.28) 34%,rgba(6,8,15,0) 52%),linear-gradient(0deg,rgba(6,8,15,.6) 0%,rgba(6,8,15,0) 18%)}
+html.motion .cine-poster img{object-position:72% 50%;opacity:.85}
+@media (max-width:760px){html.motion .cine-poster img{object-position:50% 20%;height:70%}}
+html.motion .cine-media::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(90deg,rgba(6,8,15,.72) 0%,rgba(6,8,15,.28) 34%,rgba(6,8,15,0) 52%),linear-gradient(0deg,rgba(6,8,15,.6) 0%,rgba(6,8,15,0) 18%),linear-gradient(180deg,rgba(6,8,15,.55) 0%,rgba(6,8,15,0) 22%)}
 html.motion .cine-head{position:absolute;left:var(--gut);top:clamp(88px,12vh,124px);z-index:4}
 html.motion .cine-head h2{font-size:clamp(18px,1.6vw,24px);font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);line-height:1.4}
 html.motion .cine-head h2 em{font-style:normal}
@@ -410,7 +413,7 @@ html.motion .cine-rail li.on{opacity:1;color:var(--ivory)}
 html.motion .cine-rail::before{content:"";position:absolute;left:0;top:-1px;height:1px;width:100%;background:var(--copper);transform-origin:left;transform:scaleX(var(--cp,0))}
 @media (max-width:1100px){html.motion .cine-rail li:not(.on){display:none}html.motion .cine-rail{justify-content:flex-start}}
 @media (max-width:760px){
-  html.motion .cine-media::after{background:linear-gradient(0deg,var(--ink) 0%,rgba(6,8,15,.92) 34%,rgba(6,8,15,0) 56%),linear-gradient(180deg,rgba(6,8,15,.6) 0%,rgba(6,8,15,0) 16%)}
+  html.motion .cine-media::after{background:linear-gradient(0deg,var(--ink) 0%,rgba(6,8,15,.92) 34%,rgba(6,8,15,0) 56%),linear-gradient(180deg,rgba(6,8,15,.85) 0%,rgba(6,8,15,.4) 15%,rgba(6,8,15,0) 26%)}
   html.motion .cine-head{top:78px}
   html.motion .cc{left:var(--gut);right:var(--gut);width:auto;justify-content:flex-end;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
   html.motion .cc h3{font-size:clamp(30px,8.4vw,40px);margin-bottom:10px}
@@ -434,7 +437,7 @@ html.motion .cine-rail::before{content:"";position:absolute;left:0;top:-1px;heig
 .craft-gl .cine-gl{transition:opacity .8s}
 .craft-gl.gl-live+#yarn{display:none}
 .craft-gl::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(11,18,38,.85) 0%,rgba(11,18,38,.3) 30%,rgba(11,18,38,0) 46%)}
-@media (max-width:860px){.craft-gl::after{background:linear-gradient(0deg,rgba(11,18,38,.95) 0%,rgba(11,18,38,.6) 30%,rgba(11,18,38,0) 52%),linear-gradient(180deg,rgba(11,18,38,.8) 0%,rgba(11,18,38,0) 26%)}}
+@media (max-width:860px){.craft-gl::after{background:linear-gradient(0deg,rgba(11,18,38,.95) 0%,rgba(11,18,38,.6) 30%,rgba(11,18,38,0) 52%),linear-gradient(180deg,rgba(11,18,38,.92) 0%,rgba(11,18,38,.7) 30%,rgba(11,18,38,0) 46%)}}
 
 /* sticky WhatsApp on phones */
 .wa-fab{display:none}

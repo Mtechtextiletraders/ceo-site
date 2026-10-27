@@ -1,33 +1,44 @@
 # ceo-site
 
-Founder website for Abdul Rasheed Gill (M Tech Textile Traders). Static site on Cloudflare Pages: push to `main` = live.
+Personal history website of Abdul Rasheed Gill, founder of M Tech Textile Traders (1988).
+Static site on Cloudflare Pages: push to `main` = live. Canonical domain: https://abdulrasheedgill.com
 
-Keep `google87a7b96032fd7402.html` (Search Console verification).
+Keep `google87a7b96032fd7402.html` (Search Console verification) and `functions/_middleware.js`
+(301 from `ceo.mtechtextiletraders.com` and `www.` to the main domain).
+
+## Pages
+
+| File | URL | What it is |
+|---|---|---|
+| `index.html` | `/` | Short home: name intro (once per browser session), hero with background video and portrait, three teasers, contact strip |
+| `journey.html` | `/journey` | The life story in seven chapters, one photo each |
+| `milestones.html` | `/milestones` | Vertical timeline, one line per era |
+| `gallery.html` | `/gallery` | Photo grid with a keyboard-accessible lightbox |
+| `contact.html` | `/contact` | WhatsApp, call, email, city-level locations |
+| `404.html` | - | Not-found page (noindex) |
+
+Cloudflare Pages serves `journey.html` at `/journey`, so internal links, canonicals and the sitemap use the
+extensionless URLs. Header and footer are repeated in each page; change all pages together.
+
+## Assets
+
+- `css/style.css` - all styles (one accent `--accent`, one radius `--r`).
+- `js/main.js` - menu, scroll reveals, home intro, hero video, lightbox. No libraries.
+- `assets/video/bg-d.mp4` + `bg-d.webp` (desktop, 16:9) and `bg-m.mp4` + `bg-m.webp` (mobile, 9:16).
+  The `.webp` is the still poster shown first; the video starts after page load and is skipped
+  for reduced motion and Save-Data.
+- `assets/fonts/` - Bodoni Moda 500 (name, headings) and Hanken Grotesk 400/600 (text).
 
 ## Swapping photos
 
-All photos are plain files in `assets/img/`. To use new edited photos, replace the file with one of the
-**same name, same aspect ratio** (JPG, roughly the same pixel size). No HTML change is needed.
+Photos live in `assets/img/` as a `.jpg` (fallback, social/schema) plus a `.webp` with the same name (what browsers load).
+Replace both with the **same name and aspect ratio**:
 
-| File | Where it shows | Shape |
-|---|---|---|
-| `hero.jpg` | Hero portrait (first screen) and social preview | Square 1640x1640, face near centre, upper third |
-| `og.jpg` | Link preview (WhatsApp / Facebook) | 1200x630 |
-| `advisory.jpg` | Advisory section | Square 1100x1100 |
-| `field-spinning.jpg`, `field-carding.jpg`, `field-dispatch.jpg`, `field-hall.jpg`, `field-exhibition.jpg` | Story chapters | Portrait 825x1100 (3:4) |
-| `field-tc07.jpg`, `field-floor-1.jpg`, `field-ringframes.jpg`, `field-abroad.jpg`, `field-travel.jpg` | "On the floor" rail | Portrait 825x1100 (3:4) |
+| File | Shape |
+|---|---|
+| `hero.jpg` / `hero.webp` / `hero-800.webp` | Square 1640x1640 (800x800 for `hero-800`), face in the upper third |
+| `advisory.*` | Square 1100x1100 |
+| `field-*.*` | Portrait 825x1100 (3:4) |
+| `og.jpg` | 1200x630 link preview |
 
-After replacing, bump `?v=` on `css/style.css` in `index.html` is not needed for images; Cloudflare serves new files on deploy.
-
-## Real-time 3D (WebGL)
-
-Source is in a separate build folder (not deployed); the bundle is in `js/cine/` (Three.js r170, code-split per scene,
-loaded only when a section is near the screen and disposed when far away).
-
-- `machine` - ring spinning frame: reveal, turn, exploded view with callouts, ring & traveller macro, closes
-- `drive` - meshing gear train: spare parts -> machinery -> complete mills -> imports
-- `globe` - career journey on a 3D globe (Natural Earth coastlines): Karachi 1988, industrial cities, Turkey/Egypt/Russia, Singapore, Lahore & Faisalabad
-- `cotton` - cotton bolls drawn into sliver, twisted into yarn, wound onto a cone (inside "Expertise")
-
-Posters `assets/img/cine/*-d.webp` / `*-m.webp` are frames rendered from the same scenes; they show when WebGL is
-unavailable or reduced motion is on. Regenerate by opening `/?poster=<scene>&cinep=<0..1>`.
+To make a WebP from a JPG: `python3 -c "from PIL import Image; Image.open('x.jpg').save('x.webp', quality=78)"`.

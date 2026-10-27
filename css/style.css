@@ -46,7 +46,7 @@ p{text-wrap:pretty}
 .sec.white{background:var(--white)}
 .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:clamp(36px,5vw,64px)}
 .sec-head p{max-width:30em;color:var(--muted);margin:0}
-@media (max-width:760px){.sec-head{flex-direction:column;align-items:flex-start;gap:18px}}
+@media (max-width:900px){.sec-head{flex-direction:column;align-items:flex-start;gap:18px}}
 .center{text-align:center}
 .center .lead{margin-left:auto;margin-right:auto}
 
@@ -127,7 +127,15 @@ p{text-wrap:pretty}
 .film video{opacity:0;transition:opacity .8s var(--ease)}
 .film video.is-on{opacity:1}
 .film-cap{position:absolute;left:12px;bottom:10px;z-index:2;font:500 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6)}
-@media (max-width:860px){
+.film::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;z-index:1;background:linear-gradient(to top,rgba(20,18,15,.55),rgba(20,18,15,0));pointer-events:none}
+@media (min-width:700px) and (max-width:1100px){
+  .hero-card{gap:clamp(24px,3.4vw,40px);padding:clamp(30px,4.4vw,48px)}
+  .hero-media{max-width:440px}
+  .film{left:-7%;width:54%;border-width:4px;border-radius:12px}
+  .film-cap{display:none}
+  .film::after{display:none}
+}
+@media (max-width:699px){
   .hero-card{grid-template-columns:1fr;border-radius:var(--r);padding:30px 22px 26px;gap:30px}
   .hero-media{justify-self:center;max-width:440px}
   .film{left:-6px;bottom:-14px;width:36%;aspect-ratio:9/16;border-width:4px;border-radius:12px}
@@ -201,7 +209,7 @@ p{text-wrap:pretty}
 
 /* ---------- ink contact band ---------- */
 .inkband{background:var(--ink);color:var(--on-ink);text-align:center}
-.inkband h2{color:var(--on-ink)}
+.inkband h2{color:var(--on-ink);margin-bottom:18px}
 .inkband h2 em{color:#e3a77f}
 .inkband .eyebrow{color:var(--on-ink-mute)}
 .inkband .eyebrow::before{background:#e3a77f}
@@ -242,7 +250,7 @@ p{text-wrap:pretty}
 .chips a{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-size:14.5px;background:var(--linen-2);transition:border-color .2s,background-color .2s}
 .chips a b{font:italic 400 15px/1 var(--serif);color:var(--copper)}
 .chips a:hover{border-color:var(--copper);background:var(--white)}
-@media (max-width:600px){.chips{display:none}}
+@media (max-width:900px){.chips{display:none}}
 .chap{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,7vw,110px);align-items:center;padding:clamp(56px,8vw,110px) 0;border-top:1px solid var(--line)}
 .chap:first-child{border-top:0}
 .chap.flip .chap-ph{order:2}
@@ -255,7 +263,8 @@ p{text-wrap:pretty}
 .chap h2{font-size:clamp(32px,3.6vw,48px);line-height:1.1;margin-bottom:18px}
 .chap .tx p{color:var(--muted);max-width:32em}
 .chap .tx p:first-of-type{color:var(--text)}
-@media (max-width:860px){.chap{grid-template-columns:1fr;gap:28px}.chap.flip .chap-ph{order:0}.chap-ph{max-width:380px}}
+@media (min-width:700px) and (max-width:1040px){.chap{gap:clamp(28px,4.4vw,48px)}.chap .era{font-size:clamp(48px,6.4vw,72px)}}
+@media (max-width:699px){.chap{grid-template-columns:1fr;gap:28px}.chap.flip .chap-ph{order:0}.chap-ph{max-width:380px}}
 .interlude{position:relative;border-radius:var(--r);overflow:hidden;margin:clamp(24px,4vw,48px) 0;aspect-ratio:21/9;background:var(--band)}
 .interlude img{width:100%;height:118%;object-fit:cover;margin-top:-9%}
 .interlude p{position:absolute;left:0;right:0;bottom:0;margin:0;padding:clamp(28px,5vw,64px);font:400 clamp(26px,3.4vw,46px)/1.15 var(--serif);color:#fff;background:linear-gradient(to top,rgba(20,18,15,.72),rgba(20,18,15,0));text-wrap:balance}
@@ -394,6 +403,44 @@ p{text-wrap:pretty}
 @keyframes in-line{to{transform:scaleX(1)}}
 @keyframes in-lift{to{transform:translateY(-100%)}}
 .has-intro body{overflow:hidden}
+
+/* ---------- touch devices: bigger tap targets, tap feedback instead of hover ---------- */
+@media (pointer:coarse){
+  .brand{min-height:44px}
+  .crumbs a,.c-card a.v,.foot-legal a,.c-note a{position:relative}
+  .crumbs a::after,.foot-legal a::after,.c-note a::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;height:44px;transform:translateY(-50%)}
+  .c-card a.v{display:inline-flex;align-items:center;min-height:44px}
+  .foot a{padding:12px 0}
+  .foot ul{gap:0 26px}
+  .chips a{min-height:44px}
+  .rail-dots{gap:0}
+  .rail-dots button{width:44px;height:44px}
+}
+@media (hover:none){
+  .tile:hover,.way:hover,.c-card:hover,.tl-card:hover{transform:none}
+  .way:hover{box-shadow:none}
+  .tile:hover .ph img,.g-tile button:hover img{transform:none}
+  .btn:hover::before{transform:scaleX(0)}
+  .btn.ghost:hover{color:var(--text)}
+  .inkband .btn.ghost:hover{color:var(--on-ink)}
+  .inkband .btn:not(.ghost):hover{border-color:var(--copper);color:#fff}
+  .btn:hover{border-color:var(--copper)}
+  .btn.ghost:hover{border-color:var(--text)}
+  .inkband .btn.ghost:hover{border-color:rgba(243,238,230,.55)}
+  .lb-btn:hover{background:transparent;color:var(--on-ink)}
+  .to-top:hover{background:var(--white);color:var(--text);border-color:var(--line)}
+  .btn:active::before{transform:scaleX(1);transform-origin:left;transition-duration:.15s}
+  .btn:active{border-color:var(--ink)}
+  .btn.ghost:active{color:#fff}
+  .inkband .btn:not(.ghost):active,.inkband .btn.ghost:active{color:var(--ink);border-color:var(--on-ink)}
+  .tile:active{transform:scale(.985)}
+  .tile:active .ph img,.g-tile button:active img{transform:scale(1.04)}
+  .way:active,.c-card:active,.tl-card:active{transform:scale(.985)}
+  .lb-btn:active,.to-top:active{background:var(--copper);color:#fff;border-color:var(--copper)}
+  .chips a:active{border-color:var(--copper);background:var(--white)}
+  .link:active span:first-child{background-size:100% 1px}
+  .link:active .arr{transform:translateX(5px)}
+}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}

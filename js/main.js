@@ -124,7 +124,7 @@
     var conn = navigator.connection || {};
     if (!reduce && !conn.saveData) {
       var startVideo = function () {
-        var mobile = mq('(max-width: 860px)');
+        var mobile = mq('(max-width: 699px)');
         var v = doc.createElement('video');
         v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
         v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');

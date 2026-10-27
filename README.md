@@ -10,7 +10,7 @@ Keep `google87a7b96032fd7402.html` (Search Console verification) and `functions/
 
 | File | URL | What it is |
 |---|---|---|
-| `index.html` | `/` | Short home: name intro (once per browser session), hero with background video and portrait, three teasers, contact strip |
+| `index.html` | `/` | Short home: name intro (once per browser session), hero with background video and portrait, numbers band, three story cards, contact band |
 | `journey.html` | `/journey` | The life story in seven chapters, one photo each |
 | `milestones.html` | `/milestones` | Vertical timeline, one line per era |
 | `gallery.html` | `/gallery` | Photo grid with a keyboard-accessible lightbox |
@@ -22,12 +22,16 @@ extensionless URLs. Header and footer are repeated in each page; change all page
 
 ## Assets
 
-- `css/style.css` - all styles (one accent `--accent`, one radius `--r`).
-- `js/main.js` - menu, scroll reveals, home intro, hero video, lightbox. No libraries.
+- `css/style.css` - all styles. Look: midnight ink `--ink`, ivory `--ivory`, M Tech copper `--copper`, film grain, mono labels.
+- `js/main.js` - menu, entrance animations, home intro, hero video, particles, cursor, page transitions, lightbox. No libraries.
+  Motion is self-playing: elements carry `data-a="rise|blur|fade|wipe-*|band|line|pop"`, headings `data-split`,
+  labels `data-scramble`, numbers `data-count`, icons `data-draw`; `main.js` adds `.in` when they enter the screen.
+  Without JS, or with reduced motion, everything is shown in its final state. No scroll-pinning or scroll-scrubbing.
 - `assets/video/bg-d.mp4` + `bg-d.webp` (desktop, 16:9) and `bg-m.mp4` + `bg-m.webp` (mobile, 9:16).
   The `.webp` is the still poster shown first; the video starts after page load and is skipped
   for reduced motion and Save-Data.
-- `assets/fonts/` - Bodoni Moda 500 (name, headings) and Hanken Grotesk 400/600 (text).
+- `assets/fonts/` - Bodoni Moda 400 + italic (name, headings), Hanken Grotesk 300/400/500 (text), IBM Plex Mono 400/500 (labels).
+- `assets/img/mtech-mark.png` - M Tech mark in the header.
 
 ## Swapping photos
 

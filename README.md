@@ -30,9 +30,9 @@ extensionless URLs. Header and footer are repeated in each page; change all page
   `main.js` adds `.in` when they enter the screen. Without JS, or with reduced motion, everything shows in its final state.
   No scroll-pinning, scroll-scrubbing, cursor effects or particles.
 - Home intro: linen screen, name rises, a copper line draws, panel lifts away (~2 s). Once per browser tab (`sessionStorage` key `arg_intro`); click/tap/Esc skips.
-- `assets/video/bg-d.mp4` + `bg-d.webp` (desktop, 16:9) and `bg-m.mp4` + `bg-m.webp` (mobile, 9:16) play in the small
-  rounded "film" frame beside the hero portrait. The `.webp` poster shows first; the video starts after page load and is
-  skipped for reduced motion and Save-Data.
+- `assets/img/hall-frame.webp` - still photo of a ring spinning hall in the small rounded frame beside the hero portrait (no video).
+- Phones and tablets keep the desktop arrangement (side-by-side hero, band and chapters, 3-up tiles, 2x2 cards,
+  alternating timeline, 3-column gallery), only scaled down. No carousels.
 - `assets/fonts/` - Bodoni Moda 400 + italic (headings), Hanken Grotesk 300/400/500 (text).
 - `assets/img/mtech-mark-ink.png` - M Tech mark (dark) in the header.
 - `assets/img/mood-*.webp` - supporting Pexels photos (cotton field, ring frames, blue yarn), free under the Pexels

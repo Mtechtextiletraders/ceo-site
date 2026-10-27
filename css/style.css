@@ -121,12 +121,13 @@ figure{margin:0}
 .hero .eyebrow{color:var(--on-dark-2)}
 .nw{white-space:nowrap}
 .hero h1{margin-top:14px;color:#fff}
-.hero h1 span{display:block}
+.hero h1 span{display:inline}.hero h1 span:last-child{display:block}.hero-inner>*{min-width:0}
 .hero-line{margin-top:20px;max-width:34ch;font-size:clamp(19px,1.9vw,23px);line-height:1.45;color:var(--on-dark)}
 .hero .more{color:#fff;margin-top:28px}
 @media (min-width:900px){
   .hero-inner{grid-template-columns:1fr auto;gap:64px}
-  .hero-portrait{order:2;width:clamp(300px,28vw,400px)}
+  .hero-portrait{order:2;width:clamp(280px,26vw,400px)}
+  .hero h1 span{display:block}
 }
 
 /* Teasers */

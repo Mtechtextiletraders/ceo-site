@@ -99,7 +99,7 @@
     var show = function (i) {
       idx = (i + tiles.length) % tiles.length;
       var t = tiles[idx];
-      img.src = t.getAttribute('data-full');
+      img.src = t.getAttribute('data-full'); img.hidden = false;
       img.alt = t.querySelector('img').alt;
       img.width = +t.getAttribute('data-w'); img.height = +t.getAttribute('data-h');
       cap.textContent = t.getAttribute('data-cap');

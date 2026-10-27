@@ -1,6 +1,6 @@
 /* Abdul Rasheed Gill - site script (no libraries).
-   Menu, soft entrance animations, counters, home intro, hero film, header shrink,
-   back to top, gentle photo parallax, story rail, FAQ accordion, footer wordmark, lightbox. */
+   Menu, soft entrance animations, counters, home intro, header shrink,
+   back to top, gentle photo parallax, FAQ accordion, footer wordmark, lightbox. */
 (function () {
   'use strict';
   window.__arg = true;
@@ -82,8 +82,8 @@
           entries.forEach(function (en) { if (en.isIntersecting) { (en.target.__rv || []).forEach(reveal); io.unobserve(en.target); } });
         }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
         targets.forEach(function (el) {
-          /* clipped images and cards inside a horizontal rail are watched through their container */
-          var watch = (el.parentNode && el.parentNode.closest && el.parentNode.closest('[data-rail]')) || (el.getAttribute('data-a') === 'img' ? el.parentNode : el);
+          /* clipped images are watched through their container */
+          var watch = el.getAttribute('data-a') === 'img' ? el.parentNode : el;
           (watch.__rv = watch.__rv || []).push(el);
           io.observe(watch);
         });
@@ -118,32 +118,6 @@
     setTimeout(finish, 2300);
   }
 
-  /* ---------- Hero film (poster first, video after load) ---------- */
-  var film = $('[data-film]');
-  if (film) {
-    var conn = navigator.connection || {};
-    if (!reduce && !conn.saveData) {
-      var startVideo = function () {
-        var mobile = mq('(max-width: 699px)');
-        var v = doc.createElement('video');
-        v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
-        v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
-        v.preload = 'auto';
-        v.poster = film.getAttribute(mobile ? 'data-poster-m' : 'data-poster-d');
-        v.src = film.getAttribute(mobile ? 'data-src-m' : 'data-src-d');
-        film.appendChild(v);
-        var visible = true;
-        var play = function () { if (!visible || doc.hidden) return; var p = v.play(); if (p && p.catch) p.catch(function () {}); };
-        v.addEventListener('playing', function () { v.classList.add('is-on'); }, { once: true });
-        if ('IntersectionObserver' in win) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible) play(); else v.pause(); }).observe(film);
-        doc.addEventListener('visibilitychange', function () { if (doc.hidden) v.pause(); else play(); });
-        play();
-      };
-      if (doc.readyState === 'complete') setTimeout(startVideo, 300);
-      else win.addEventListener('load', function () { setTimeout(startVideo, 300); });
-    }
-  }
-
   /* ---------- Scroll: header shrink, back to top, gentle parallax ---------- */
   var toTop = $('.to-top'), pars = motion ? $$('[data-par]') : [], ticking = false;
   var onScroll = function () {
@@ -164,27 +138,6 @@
   onScroll();
   if (toTop) toTop.addEventListener('click', function () { win.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); var s = $('.skip'); if (s) s.focus({ preventScroll: true }); });
 
-  /* ---------- Story rail on phones: dots, swipe, gentle auto-advance ---------- */
-  $$('[data-rail]').forEach(function (rail) {
-    var dotsWrap = rail.parentNode.querySelector('.rail-dots'); if (!dotsWrap) return;
-    var cards = Array.prototype.slice.call(rail.children), dots = $$('button', dotsWrap), cur = 0, timer = null, userTouched = false, inView = false;
-    var active = function () { return getComputedStyle(rail).display === 'flex'; };
-    var setDot = function (i) { cur = i; dots.forEach(function (d, k) { d.setAttribute('aria-current', k === i ? 'true' : 'false'); }); };
-    var goTo = function (i) { rail.scrollTo({ left: cards[i].offsetLeft - cards[0].offsetLeft, behavior: reduce ? 'auto' : 'smooth' }); setDot(i); };
-    rail.addEventListener('scroll', function () {
-      var best = 0, bd = 1e9;
-      cards.forEach(function (c, i) { var d = Math.abs(c.offsetLeft - cards[0].offsetLeft - rail.scrollLeft); if (d < bd) { bd = d; best = i; } });
-      setDot(best);
-    }, { passive: true });
-    dots.forEach(function (d, i) { d.addEventListener('click', function () { userTouched = true; goTo(i); }); });
-    ['touchstart', 'pointerdown', 'wheel'].forEach(function (ev) { rail.addEventListener(ev, function () { userTouched = true; }, { passive: true }); });
-    var tick = function () { if (!userTouched && inView && active() && !doc.hidden) goTo((cur + 1) % cards.length); };
-    if (!reduce && 'IntersectionObserver' in win) {
-      new IntersectionObserver(function (en) { inView = en[0].isIntersecting; }, { threshold: 0.6 }).observe(rail);
-      timer = setInterval(tick, 5000);
-    }
-  });
-
   /* ---------- FAQ accordion ---------- */
   $$('.faq-q').forEach(function (b) {
     b.addEventListener('click', function () {
@@ -195,7 +148,7 @@
 
   /* ---------- Footer wordmark: fit to width, letters rise ---------- */
   $$('.wordmark').forEach(function (wm) {
-    var inner = doc.createElement('span'); inner.style.display = 'inline-block';
+    var inner = doc.createElement('span'); inner.style.display = 'inline-block'; inner.style.width = 'max-content';
     while (wm.firstChild) inner.appendChild(wm.firstChild);
     wm.appendChild(inner);
     if (motion) {
@@ -223,6 +176,8 @@
     };
     fit();
     if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(fit);
+    if (doc.fonts && doc.fonts.addEventListener) doc.fonts.addEventListener('loadingdone', fit);
+    win.addEventListener('load', fit);
     win.addEventListener('resize', fit);
   });
 

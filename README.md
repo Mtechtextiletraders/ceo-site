@@ -24,8 +24,8 @@ extensionless URLs. Header and footer are repeated in each page; change all page
 
 - `css/style.css` - all styles. Look: warm editorial (linen `--linen` and white backgrounds, copper accent `--copper`,
   deep ink `--ink` only for the contact band and footer), Bodoni Moda headings with one italic word, arched photo frames.
-- `js/main.js` - menu, soft entrance animations, counters, home intro, hero film, header shrink, back to top,
-  gentle photo parallax, story rail (phones), FAQ accordion, footer wordmark, lightbox. No libraries.
+- `js/main.js` - menu, soft entrance animations, counters, home intro, header shrink, back to top,
+  gentle photo parallax, FAQ accordion, footer wordmark, lightbox. No libraries.
   Elements carry `data-a="rise|fade|img"`, headings `data-split`, numbers `data-count`, icons `data-draw`;
   `main.js` adds `.in` when they enter the screen. Without JS, or with reduced motion, everything shows in its final state.
   No scroll-pinning, scroll-scrubbing, cursor effects or particles.

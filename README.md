@@ -10,8 +10,8 @@ Keep `google87a7b96032fd7402.html` (Search Console verification) and `functions/
 
 | File | URL | What it is |
 |---|---|---|
-| `index.html` | `/` | Short home: name intro (once per browser session), hero with background video and portrait, numbers band, three story cards, contact band |
-| `journey.html` | `/journey` | The life story in seven chapters, one photo each |
+| `index.html` | `/` | Short home: name intro (once per tab), hero card with portrait and film, life-in-numbers strip, makes ticker, three story tiles, grey band, "the way he works", contact band |
+| `journey.html` | `/journey` | The life story in seven chapters, one photo each, plus a short FAQ (FAQPage schema) |
 | `milestones.html` | `/milestones` | Vertical timeline, one line per era |
 | `gallery.html` | `/gallery` | Photo grid with a keyboard-accessible lightbox |
 | `contact.html` | `/contact` | WhatsApp, call, email, city-level locations |
@@ -22,16 +22,21 @@ extensionless URLs. Header and footer are repeated in each page; change all page
 
 ## Assets
 
-- `css/style.css` - all styles. Look: midnight ink `--ink`, ivory `--ivory`, M Tech copper `--copper`, film grain, mono labels.
-- `js/main.js` - menu, entrance animations, home intro, hero video, particles, cursor, page transitions, lightbox. No libraries.
-  Motion is self-playing: elements carry `data-a="rise|blur|fade|wipe-*|band|line|pop"`, headings `data-split`,
-  labels `data-scramble`, numbers `data-count`, icons `data-draw`; `main.js` adds `.in` when they enter the screen.
-  Without JS, or with reduced motion, everything is shown in its final state. No scroll-pinning or scroll-scrubbing.
-- `assets/video/bg-d.mp4` + `bg-d.webp` (desktop, 16:9) and `bg-m.mp4` + `bg-m.webp` (mobile, 9:16).
-  The `.webp` is the still poster shown first; the video starts after page load and is skipped
-  for reduced motion and Save-Data.
-- `assets/fonts/` - Bodoni Moda 400 + italic (name, headings), Hanken Grotesk 300/400/500 (text), IBM Plex Mono 400/500 (labels).
-- `assets/img/mtech-mark.png` - M Tech mark in the header.
+- `css/style.css` - all styles. Look: warm editorial (linen `--linen` and white backgrounds, copper accent `--copper`,
+  deep ink `--ink` only for the contact band and footer), Bodoni Moda headings with one italic word, arched photo frames.
+- `js/main.js` - menu, soft entrance animations, counters, home intro, hero film, header shrink, back to top,
+  gentle photo parallax, story rail (phones), FAQ accordion, footer wordmark, lightbox. No libraries.
+  Elements carry `data-a="rise|fade|img"`, headings `data-split`, numbers `data-count`, icons `data-draw`;
+  `main.js` adds `.in` when they enter the screen. Without JS, or with reduced motion, everything shows in its final state.
+  No scroll-pinning, scroll-scrubbing, cursor effects or particles.
+- Home intro: linen screen, name rises, a copper line draws, panel lifts away (~2 s). Once per browser tab (`sessionStorage` key `arg_intro`); click/tap/Esc skips.
+- `assets/video/bg-d.mp4` + `bg-d.webp` (desktop, 16:9) and `bg-m.mp4` + `bg-m.webp` (mobile, 9:16) play in the small
+  rounded "film" frame beside the hero portrait. The `.webp` poster shows first; the video starts after page load and is
+  skipped for reduced motion and Save-Data.
+- `assets/fonts/` - Bodoni Moda 400 + italic (headings), Hanken Grotesk 300/400/500 (text).
+- `assets/img/mtech-mark-ink.png` - M Tech mark (dark) in the header.
+- `assets/img/mood-*.webp` - supporting Pexels photos (cotton field, ring frames, blue yarn), free under the Pexels
+  licence. Used as mood images only, never presented as his own photos.
 
 ## Swapping photos
 

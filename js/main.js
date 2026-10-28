@@ -63,7 +63,7 @@
   };
 
   /* ---------- Entrance animations (self-playing, once) ---------- */
-  var targets = $$('[data-a],[data-split],[data-draw],.tl,.tl-item,.wordmark');
+  var targets = $$('[data-a],[data-split],[data-draw],.tl,.tl-item,.wordmark,[data-route]');
   var reveal = function (el) {
     if (el.classList.contains('in')) return;
     el.classList.add('in');
@@ -94,7 +94,7 @@
       }, 2600);
       win.addEventListener('pageshow', function (e) { if (e.persisted) targets.forEach(reveal); });
     };
-    if (root.classList.contains('has-intro')) setTimeout(start, 1450); else start();
+    if (root.classList.contains('has-intro')) setTimeout(start, 2250); else start();
   } else {
     root.classList.remove('motion');
   }
@@ -109,13 +109,24 @@
       root.classList.remove('has-intro');
       doc.removeEventListener('keydown', onKey);
     };
-    var skip = function () { if (!gone) { intro.classList.add('out'); setTimeout(finish, 340); } };
+    var skip = function () { if (!gone) { intro.classList.add('out'); root.classList.remove('has-intro'); setTimeout(finish, 560); } };
     var onKey = function (e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip(); };
     intro.addEventListener('click', skip);
     intro.addEventListener('touchstart', skip, { passive: true });
     doc.addEventListener('keydown', onKey);
-    intro.addEventListener('animationend', function (e) { if (e.target === intro) finish(); });
-    setTimeout(finish, 2300);
+    setTimeout(function () { root.classList.remove('has-intro'); }, 2150);
+    setTimeout(finish, 3200);
+  }
+
+  /* ---------- Hero portrait: soft tilt toward the pointer (desktop only) ---------- */
+  var tilt = motion && mq('(hover: hover) and (pointer: fine)') ? $('[data-tilt]') : null;
+  if (tilt) {
+    var arch = $('.arch', tilt), tq = false, tx = 0, ty = 0;
+    var apply = function () { tq = false; arch.style.transform = 'perspective(1200px) rotateY(' + (tx * 5).toFixed(2) + 'deg) rotateX(' + (-ty * 4).toFixed(2) + 'deg)'; };
+    doc.addEventListener('mousemove', function (e) {
+      tx = e.clientX / win.innerWidth - 0.5; ty = e.clientY / win.innerHeight - 0.5;
+      if (!tq) { tq = true; raf(apply); }
+    }, { passive: true });
   }
 
   /* ---------- Scroll: header shrink, back to top, gentle parallax ---------- */

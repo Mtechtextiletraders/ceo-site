@@ -6,5 +6,8 @@ export async function onRequest({ request, next }) {
       && !url.pathname.startsWith('/google')) {
     return Response.redirect('https://abdulrasheedgill.com' + url.pathname + url.search, 301);
   }
+  if (url.pathname === '/gallery' || url.pathname === '/gallery.html') {
+    return Response.redirect('https://abdulrasheedgill.com/journey', 301);
+  }
   return next();
 }

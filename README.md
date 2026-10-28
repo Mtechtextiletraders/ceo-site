@@ -1,6 +1,6 @@
 # ceo-site
 
-Personal history website of Abdul Rasheed Gill, founder of M Tech Textile Traders (1988).
+Personal history website of Abdul Rasheed Gill, founder of M Tech Textile Traders (in the trade since 1988, M Tech since 2000).
 Static site on Cloudflare Pages: push to `main` = live. Canonical domain: https://abdulrasheedgill.com
 
 Keep `google87a7b96032fd7402.html` (Search Console verification) and `functions/_middleware.js`
@@ -13,7 +13,6 @@ Keep `google87a7b96032fd7402.html` (Search Console verification) and `functions/
 | `index.html` | `/` | Short home: name intro (once per tab), hero card with portrait and film, life-in-numbers strip, makes ticker, three story tiles, grey band, "the way he works", contact band |
 | `journey.html` | `/journey` | The life story in seven chapters, one photo each, plus a short FAQ (FAQPage schema) |
 | `milestones.html` | `/milestones` | Vertical timeline, one line per era |
-| `gallery.html` | `/gallery` | Photo grid with a keyboard-accessible lightbox |
 | `contact.html` | `/contact` | WhatsApp, call, email, city-level locations |
 | `404.html` | - | Not-found page (noindex) |
 
@@ -51,3 +50,10 @@ Replace both with the **same name and aspect ratio**:
 | `og.jpg` | 1200x630 link preview |
 
 To make a WebP from a JPG: `python3 -c "from PIL import Image; Image.open('x.jpg').save('x.webp', quality=78)"`.
+
+## Round 4 (28 Oct 2026)
+- Gallery page removed (`/gallery` 301 to `/journey` in `functions/_middleware.js`); its photos live in the journey chapters and milestone cards.
+- Title Case headings/buttons, no section tags, no chapter numbers, no years inside the journey.
+- Every section fits one desktop screen (checked 1280x720 to 1920x1080).
+- Home intro: dark curtain, name rises, splits open (once per tab, `arg_intro2`). Hero: rotating seal, slow portrait zoom, pointer tilt; route line across Pakistan; Rules Of Business cards.
+- Generator: scratchpad ceo3/gen.py.
